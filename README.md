@@ -71,7 +71,7 @@ Content-Length: 0
 
 ## Instructions
 
-- You should clond this repository, write the solution in your own branch and push the changes to the server (do not create a pull request).
+- You should clone this repository, write the solution in your own branch and push the changes to the server (do not create a pull request).
 - You should try to design the most well designed and maintainable solution as possible, we will evaluate the implementation details and the design choices.
 - You should not have to care about the runtime details like the dependency injection containers, database access layer, logger implementation or any other interface implementation, just trust in the available interfaces and feel free to create new ones. Remember, you're responsible to implement the business requirements, anything beyond that, is optional.
 - Your code should be tested using unit tests and integration tests, feel free to use packages to mock the expected behaviors.
