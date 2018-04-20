@@ -2,19 +2,19 @@
 
 ## The Problem
 
-We (the shipping team) released a new service that provides a RESTful API to replace the direct access to the CEPs(1) database in order to auto-complete the address form in our checkout. Now, you are responsible to change the current code base and replace the old implementation by a new one, using the available resources in the API.
+We (the shipping team) will release a new service that provides a RESTful API to replace the direct access to the CEPs(1) database in order to auto-complete the address form in our checkout. This service will be released on next week and we need to get the checkout ready to be deployed with the service. Now, you are responsible to change the current code base and replace the old implementation by a new one, using the available resources in the API.
 
 ## The Objective
 
-Given the existing code base, and the available API resources described in this above, write a new implementation to access the provided service.
+Given the existing code base, and the available API resources described in this document, write a new implementation to access the provided service.
 
 ## Business Requirements
 
-1 - The current implementation is not good enough and we know that. As you are improving this feature, we expect that you can improve the software design as well, so, creating new entities, optimising statements and writing new tests are a good start point.
+1 - The current implementation is not good enough and we know that. As you are implementing this new feature, we expect that you can improve the software design as well, so, creating new entities, optimising statements and writing new tests are a good start point.
 
 2 - This service is new and never went to production before, so to minimize the risks, we want to release it only for the stores that are a part of the beta testing program, and all the remaining stores should use the old implementation. Check out the Store model to figure out how to determine if a store matches the condition.
 
-3 - And, to avoid crawlers and bots, the service has a limit of 10k requests/hour, but in some hours of the day we have peaks of more than 10k requests/hour and you should consider it when implementing the solution.
+3 - The service is under development and will be released on next week, and as we need to move fast with the team projects, we cannot wait for a staging server, so, using the specification of the service API, you need to mock-up the expected behavior in your tests to make sure that it will work when we deploy it.
 
 4 - Finally, an error (of any type) should never be shown to the users, so, error treatment is required in a end-to-end way.
 
@@ -107,10 +107,27 @@ X-Rate-Reset: 3599
 
 ## Instructions
 
-- You should fork this repository using your GitHub account and write your solution in your own branch and send to us within the agreed deadline.
+- You should push the test result into a GitHub public repository and send to the recruited within the agreed deadline.
 - You should read the code base to understand what is already implemented and how you can use it to help you achieve the solution.
 - You should try to design the most well designed and maintainable solution as possible, we will evaluate the implementation details and the design choices.
 - You should not have to care about the runtime details like the dependency injection containers, database access layer, logger implementation or any other interface implementation, just trust in the available interfaces and feel free to create new ones. Remember, you're responsible to implement the business requirements, anything beyond that, is optional.
 - Your code should be tested using unit tests and integration tests, feel free to use packages to mockup the expected behaviors.
+
+## Setup
+
+This project has some dependencies and uses composer to manage this dependencies, and you can install it using:
+
+```
+$ cd /path/to/the/project
+$ composer install
+```
+
+## Running the tests
+
+To run the tests, you can use the following command line:
+
+```
+$ ./vendor/bin/phpunit
+```
 
 (1) CEP stands by Código de Endereçamento Postal, that is the acronym for zipcode in Brazil.
