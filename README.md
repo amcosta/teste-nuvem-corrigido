@@ -12,7 +12,7 @@ Given the existing code base, and the available API resources described in this 
 
 1 - The current implementation is not good enough and we know that. As you are implementing this new feature, we expect that you can improve the software design as well, so, creating new entities, optimising statements and writing new tests are a good start point.
 
-2 - This service is new and never went to production before, so to minimize the risks, we want to release it only for the stores that are a part of the beta testing program, and all the remaining stores should use the old implementation. Check out the Store model to figure out how to determine if a store matches the condition.
+2 - This service is new and never went to production before, so to minimize the risks, we want to release it only for the stores that are a part of the beta testing program, and all the remaining stores should use the old implementation. Check out the **Store model** to figure out how to determine if a store matches the condition.
 
 3 - The service is under development and will be released on next week, and as we need to move fast with the team projects, we cannot wait for a staging server, so, using the specification of the service API, you need to mock-up the expected behavior in your tests to make sure that it will work when we deploy it.
 
