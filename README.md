@@ -24,7 +24,7 @@ The Address API has only one endpoint and it was designed to provide resilience 
 
 ### Base URL
 
-The specified service is available under: `https://shipping.tiendanube.com/v1/`
+The specified service will be available under: `https://shipping.tiendanube.com/v1/`
 
 ### Address Endpoint
 
