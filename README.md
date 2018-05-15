@@ -2,21 +2,29 @@
 
 ## The Problem
 
-We (the shipping team) will release a new service that provides a RESTful API to replace the direct access to the CEPs(1) database in order to auto-complete the address form in our checkout. This service will be released on next week and we need to get the checkout ready to be deployed with the service. Now, you are responsible to change the current code base and replace the old implementation by a new one, using the available resources in the API.
+You are a part of the _Checkout & Fullfilment_ team, that is responsible to the **checkout application** that allows the consumers to complete the orders with their information, including personal information, billing and shipping addresses and payment data. 
+
+The _Shipping_ team is about to release a new service to replace the direct access to the CEPs(1) database by a webservice that provides a RESTful API. This addresses information is needed during the checkout process in order to auto-complete the address form in our checkout. 
+
+To make it a bit harder, the **address service** is under development and will be released on next week, but we can't wait to the service deployment to start the development, and the only reference we have is the API specification described in this document, so we need you to make it happen. 
 
 ## The Objective
 
-Given the existing code base, and the available API resources described in this document, write a new implementation to access the provided service.
+Given the existing code base, and the API specification described in this document, we need you to write a new implementation to access this new service.
 
 ## Business Requirements
 
-1 - The current implementation is not good enough and we know that. As you are implementing this new feature, we expect that you can improve the software design as well, so, creating new entities, optimising statements and writing new tests are a good start point.
+1 - The current implementation is not good enough and we know that. As you are implementing this new feature, **we expect** that you can improve the software design as well, so, making refactors, creating new entities, optimising statements and writing new tests are a good start point.
 
-2 - This service is new and never went to production before, so to minimize the risks, we want to release it only for the stores that are a part of the beta testing program, and all the remaining stores should use the old implementation. Check out the **Store model** to figure out how to determine if a store matches the condition.
+2 - This service is new and never went to production before, so to minimize the risks, **we need** to release it only for the stores that are a part of the beta testing program, and all the remaining stores **should use** the old implementation. Check out the **Store model** to figure out how to determine if a store is part of the beta testing program.
 
-3 - The service is under development and will be released on next week, and as we need to move fast with the team projects, we cannot wait for a staging server, so, using the specification of the service API, you need to mock-up the expected behavior in your tests to make sure that it will work when we deploy it.
+3 - The service is under development and will be released on next week, and as we need to move fast with the team projects, we cannot wait for a staging server, so, using the API specification described below, you need to mock-up the expected behavior in your tests to make sure that it will work when we deploy it.
 
-4 - Finally, an error (of any type) should never be shown to the users, so, error treatment is required in a end-to-end way.
+4 - Finally, an error (of any type) **should never** be shown to the users, so, error handling is required in a end-to-end way.
+
+## Extra Requirements (mandatory)
+
+5 - To avoid crawlers and bots, the service has **a limit of 10k requests per 30 minutes period**, but in some hours of the day we have **peaks of 30k requests/hour** and **you should** consider it when implementing the solution.
 
 ## The API
 
@@ -40,6 +48,9 @@ HTTP/1.1 200 OK
 Server: nginx/1.12.2
 Content-Type: application/json
 Content-Length: 308
+X-Rate-Limit: 10000
+X-Rate-Remaining: 8790
+X-Rate-Reset: 1710
 
 {
     "altitude":7.0,
@@ -67,6 +78,9 @@ HTTP/1.1 404 Not Found
 Server: nginx/1.12.2
 Content-Type: application/json
 Content-Length: 0
+X-Rate-Limit: 10000
+X-Rate-Remaining: 8789
+X-Rate-Reset: 1095
 ```
 
 #### Server Error
@@ -77,6 +91,26 @@ HTTP/1.1 500 Internal Server Error
 Server: nginx/1.12.2
 Content-Type: application/json
 Content-Length: 0
+X-Rate-Limit: 10000
+X-Rate-Remaining: 8788
+X-Rate-Reset: 780
+```
+
+#### Service Usage Exceeded 
+```
+$ curl -XGET -H 'Authentication bearer: YouShallNotPass' -H "Content-type: application/json" https://shipping.tiendanube.com/address/40010000
+
+HTTP/1.1 429 Too Many Requests
+Server: nginx/1.12.2
+Content-Type: application/json
+Content-Length: 76
+X-Rate-Limit: 10000
+X-Rate-Remaining: 0
+X-Rate-Reset: 82
+
+{  
+    "error":"Request limit exceeded, please try again in 3599 seconds"
+}
 ```
 
 ## Instructions
