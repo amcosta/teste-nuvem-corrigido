@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
  *
  * @package TiendaNube\Checkout\Service\Shipping
  */
-class AddressService
+class AddressService implements AddressServiceInterface
 {
     /**
      * The database connection link
