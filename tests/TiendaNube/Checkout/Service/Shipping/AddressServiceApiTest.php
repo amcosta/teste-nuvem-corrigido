@@ -3,6 +3,7 @@
 namespace TiendaNube\Checkout\Service\Shipping;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -84,5 +85,33 @@ class AddressServiceApiTest extends TestCase
         $response = $service->getAddressByZip('400100001');
 
         $this->assertNull($response);
+    }
+
+    public function testHandleExceptionInRequest()
+    {
+        $exception = $this->createMock(ClientException::class);
+
+        $client = $this->createMock(Client::class);
+        $client->method('request')->willThrowException($exception);
+
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $service = new AddressServiceApi($client, $logger);
+        $response = $service->getAddressByZip('400100001');
+
+        $this->assertNull($response);
+    }
+
+    public function testUnhandleExceptionInRequest()
+    {
+        $client = $this->createMock(Client::class);
+        $client->method('request')->willThrowException(new \Exception('An error occurred'));
+
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $this->expectException(\Exception::class);
+
+        $service = new AddressServiceApi($client, $logger);
+        $response = $service->getAddressByZip('400100001');
     }
 }

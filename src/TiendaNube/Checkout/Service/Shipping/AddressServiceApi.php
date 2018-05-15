@@ -37,13 +37,15 @@ class AddressServiceApi implements AddressServiceInterface
     public function getAddressByZip(string $zip): ?array
     {
         $this->logger->debug(sprintf(
-            'Make a request to get the address to endpoint "%s"', $this->client->getConfig('base_uri')
+            'Make a request to get the address at the endpoint "%s"', $this->client->getConfig('base_uri')
         ));
 
         try {
             $response = $this->client->request('GET', 'address/' . $zip);
         } catch (GuzzleException $e) {
-            $this->logger->error('An error occurred in the request to address endpoint, exception message: ' . $e->getMessage());
+            $this->logger->error(
+                'An error occurred in the request to get address at the endpoint, exception message: ' . $e->getMessage()
+            );
             return null;
         }
 
