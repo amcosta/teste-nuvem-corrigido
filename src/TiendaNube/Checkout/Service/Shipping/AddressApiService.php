@@ -25,9 +25,9 @@ class AddressApiService implements AddressServiceInterface
 
     /**
      * AddressApiService constructor.
-     *
      * @param Client $client
      * @param LoggerInterface $logger
+     * @param AddressPersistenceInterface $addressPersistenceService
      */
     public function __construct(Client $client, LoggerInterface $logger, AddressPersistenceInterface $addressPersistenceService)
     {
