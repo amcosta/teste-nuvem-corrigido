@@ -58,7 +58,7 @@ class AddressDatabaseService implements AddressPersistenceInterface
 
     public function saveAddress(array $address)
     {
-        $this->logger->debug('Save the api response address');
+        $this->logger->debug('Save the api response address in database');
 
         try {
             // save the address in database
