@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use GuzzleHttp\Exception\GuzzleException;
 
-class AddressServiceApi implements AddressServiceInterface
+class AddressApiService implements AddressServiceInterface
 {
     /**
      * @var Client
@@ -19,15 +19,21 @@ class AddressServiceApi implements AddressServiceInterface
     private $logger;
 
     /**
-     * AddressServiceApi constructor.
+     * @var AddressPersistenceInterface
+     */
+    private $addressPersistenceService;
+
+    /**
+     * AddressApiService constructor.
      *
      * @param Client $client
      * @param LoggerInterface $logger
      */
-    public function __construct(Client $client, LoggerInterface $logger)
+    public function __construct(Client $client, LoggerInterface $logger, AddressPersistenceInterface $addressPersistenceService)
     {
         $this->client = $client;
         $this->logger = $logger;
+        $this->addressPersistenceService = $addressPersistenceService;
     }
 
     /**
@@ -36,6 +42,11 @@ class AddressServiceApi implements AddressServiceInterface
      */
     public function getAddressByZip(string $zip): ?array
     {
+        $result = $this->addressPersistenceService->getAddressByZip($zip);
+        if (is_array($result)) {
+            return $result;
+        }
+
         $this->logger->debug(sprintf(
             'Make a request to get the address at the endpoint "%s"', $this->client->getConfig('base_uri')
         ));
@@ -54,8 +65,12 @@ class AddressServiceApi implements AddressServiceInterface
         ));
 
         if (200 === $response->getStatusCode()) {
-            $address = $response->getBody()->getContents();
-            return json_decode($address, true);
+            $json = $response->getBody()->getContents();
+            $address = json_decode($json, true);
+
+            $this->addressPersistenceService->saveAddress($address);
+
+            return $address;
         }
 
         return null;
