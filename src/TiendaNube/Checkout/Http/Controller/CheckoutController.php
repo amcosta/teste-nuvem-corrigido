@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TiendaNube\Checkout\Http\Controller;
 
 use Psr\Http\Message\ResponseInterface;
-use TiendaNube\Checkout\Service\Shipping\AddressService;
+use TiendaNube\Checkout\Service\Shipping\AddressServiceInterface;
 
 class CheckoutController extends AbstractController
 {
@@ -23,10 +23,10 @@ class CheckoutController extends AbstractController
      * @Route /address/{zipcode}
      *
      * @param string $zipcode
-     * @param AddressService $addressService
+     * @param AddressServiceInterface $addressService
      * @return ResponseInterface
      */
-    public function getAddressAction(string $zipcode, AddressService $addressService):ResponseInterface {
+    public function getAddressAction(string $zipcode, AddressServiceInterface $addressService):ResponseInterface {
         // filtering and sanitizing input
         $rawZipcode = preg_replace("/[^\d]/","",$zipcode);
 
